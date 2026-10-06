@@ -1,0 +1,109 @@
+# Blockchain-Based Digital Certificate Issuing Platform
+
+A web-based digital certificate issuing and verification system that uses blockchain technology to make certificates more secure, tamper-resistant, and publicly verifiable.
+
+This project was developed as a university assignment.
+
+---
+
+## Project Overview
+
+Traditional PDF certificates can be copied, edited, or modified, making it difficult to confirm whether a certificate is authentic.
+
+This system allows an organization to issue digital certificates and store a unique certificate hash on the Ethereum Sepolia blockchain.
+
+Anyone can verify a certificate using its Certificate ID or QR code.
+
+The system can identify whether a certificate is:
+
+- Valid
+- Expired
+- Revoked
+- Invalid
+
+---
+
+## Main Features
+
+### Organization Portal
+
+- Secure organization login
+- Organization dashboard
+- Issue new certificates
+- View issued certificates
+- Generate unique Certificate IDs
+- Generate downloadable PDF certificates
+- Generate QR codes
+- Register certificate hashes on blockchain
+- View blockchain transaction information
+- Revoke certificates
+- Send certificate issuance email notifications
+- Send revocation email notifications
+
+### Public Certificate Verification
+
+Public users can:
+
+- Verify using Certificate ID
+- Verify using QR code
+- View certificate information
+- Check blockchain registration
+- Check whether the certificate hash matches
+- View certificate status
+- View blockchain transaction information
+
+No login is required for public verification.
+
+---
+
+## Blockchain Technology
+
+The project uses the **Ethereum Sepolia Testnet**.
+
+Certificate personal information is not stored directly on the blockchain.
+
+Instead, the system generates a **SHA-256 hash** using certificate information and stores that hash in the smart contract.
+
+This allows the system to detect if certificate information has been modified.
+
+### Smart Contract
+
+Smart Contract:
+
+`CertificateRegistry.sol`
+
+Main functions:
+
+- `registerCertificate()`
+- `getCertificate()`
+- `verifyCertificate()`
+- `certificateExists()`
+- `revokeCertificate()`
+
+The smart contract also emits:
+
+- `CertificateRegistered`
+- `CertificateRevoked`
+
+---
+
+## Certificate Verification Process
+
+The verification process works like this:
+
+```text
+Certificate ID
+      ↓
+Find certificate in PostgreSQL
+      ↓
+Generate certificate hash
+      ↓
+Read blockchain record
+      ↓
+Compare hashes
+      ↓
+Check expiration
+      ↓
+Check revocation
+      ↓
+Display result
