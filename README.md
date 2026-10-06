@@ -118,3 +118,10 @@ Signed issuance/revocation transactions are persisted before broadcast and recov
 - [Authentication](docs/authentication.md), [PDF/QR](docs/pdf-certificates.md), [contract/hashing](docs/blockchain.md), [issuance/recovery](docs/blockchain-integration.md), [revocation/email](docs/revocation-email.md)
 
 Do not commit `.env`, private keys, SMTP credentials, database dumps, session cookies, or captured private email. `security:scan` checks tracked files plus Git-eligible project candidates and scoped history; its report contains only counts, file names, and credential types. Review staged files and screenshots manually before publishing. The repository and video must be uploaded by the student after the submission review.
+
+## Demo Organization Login
+
+**Email:** admin@demo.edu  
+**Password:** Set locally in `.env` using `DEMO_ADMIN_PASSWORD`
+
+For security, the real password is not included in this repository.
