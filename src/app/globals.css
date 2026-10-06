@@ -1,0 +1,22 @@
+@import "tailwindcss";
+:root { --background: #f8fafc; --foreground: #0f172a; }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+body { background: var(--background); color: var(--foreground); font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #14b8a6; outline-offset: 4px; }
+@layer components {
+  .eyebrow { @apply text-xs font-semibold tracking-widest text-teal-700 uppercase; }
+  .panel { @apply rounded-2xl border border-slate-200 bg-white shadow-sm; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-3 rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-800; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50; }
+  .btn-danger { @apply inline-flex items-center justify-center gap-3 rounded-xl bg-rose-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-rose-800; }
+  .btn-primary:disabled, .btn-secondary:disabled, .btn-danger:disabled { @apply cursor-not-allowed opacity-60; }
+  .field-label { @apply block text-sm font-medium text-slate-700; }
+  .input { @apply mt-2 block w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-normal text-slate-900 placeholder:text-slate-400 focus:border-teal-600; }
+}

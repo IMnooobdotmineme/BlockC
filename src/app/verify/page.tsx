@@ -1,0 +1,5 @@
+import { PublicShell, PageHeading } from "@/components/ui";
+import { VerifyForm } from "@/components/demo-forms";
+export default function Verify() {
+  return <PublicShell><div className="mx-auto max-w-3xl py-8 sm:py-14"><PageHeading eyebrow="Public verification" title="Verify a certificate" description="Check a certificate against its real database record and Ethereum Sepolia registration. No account is needed." /><div className="grid gap-6 md:grid-cols-2"><section className="panel p-7"><h2 className="mb-6 text-lg font-semibold">Look up by ID</h2><VerifyForm /></section><section className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-8 text-center"><div aria-hidden className="flex size-20 items-center justify-center rounded-xl border-2 border-slate-300 text-4xl text-slate-400">←</div><h2 className="mt-5 font-semibold">Use your certificate QR code</h2><p className="mt-2 text-sm leading-6 text-slate-500">Scan the QR code on your PDF with your phone&apos;s camera to open this public verification page.</p></section></div></div></PublicShell>;
+}

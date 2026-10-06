@@ -1,0 +1,3 @@
+import { requireOrganization } from "@/lib/session";
+import OrganizationNav from "@/components/organization-nav";
+export default async function OrganizationLayout({ children }: { children: React.ReactNode }) { const organization = await requireOrganization(); return <div className="min-h-screen"><OrganizationNav organizationName={organization.name} /><div className="lg:pl-64"><header className="border-b border-slate-200 bg-white px-6 py-4 text-xs text-slate-500 sm:px-10">Organization portal <span className="ml-3 rounded-full bg-slate-100 px-3 py-1">Organization access</span></header><main className="mx-auto max-w-6xl px-5 py-8 sm:px-10 sm:py-12">{children}</main></div></div>; }

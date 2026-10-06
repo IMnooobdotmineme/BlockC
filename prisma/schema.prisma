@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CertificateStatus {
+  VALID
+  EXPIRED
+  REVOKED
+}
+
+enum BlockchainRegistrationStatus {
+  UNREGISTERED
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum RevocationStatus {
+  NONE
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum NotificationKind {
+  ISSUED
+  REVOKED
+}
+
+enum EmailStatus {
+  NOT_SENT
+  SENDING
+  SENT
+  FAILED
+}
+
+model CertificateRevocationJob {
+  id                String @id @default(cuid())
+  certificateId     String @unique
+  certificate       Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  signedTransaction String
+  transactionHash   String @unique
+  nonce             BigInt
+  walletAddress     String
+  contractAddress   String
+  chainId           Int
+  createdAt         DateTime @default(now())
+
+  @@unique([chainId, walletAddress, nonce])
+}
+
+model CertificateNotification {
+  id            String @id @default(cuid())
+  certificateId String
+  certificate   Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  kind          NotificationKind
+  status        EmailStatus @default(NOT_SENT)
+  attempts      Int @default(0)
+  lastError     String?
+  leaseUntil    DateTime?
+  sentAt        DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([certificateId, kind])
+}
+
+// Durable signed intent: persisted before broadcasting, never sent to the browser.
+model CertificateBlockchainJob {
+  id                String @id @default(cuid())
+  certificateId     String @unique
+  certificate       Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  signedTransaction String
+  transactionHash   String @unique
+  nonce             BigInt
+  walletAddress     String
+  contractAddress   String
+  chainId           Int
+  createdAt         DateTime @default(now())
+
+  @@unique([chainId, walletAddress, nonce])
+}
+
+// Atomic annual counter shared by all organizations.
+model CertificateCounter {
+  year       Int @id
+  lastNumber Int @default(0)
+}
+
+model Organization {
+  id           String                @id @default(cuid())
+  name         String
+  email        String                @unique
+  passwordHash String
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  certificates Certificate[]
+  sessions     OrganizationSession[]
+}
+
+model OrganizationSession {
+  tokenHash      String       @id
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([expiresAt])
+}
+
+model Certificate {
+  id               String            @id @default(cuid())
+  certificateId    String            @unique
+  recipientName    String
+  recipientEmail   String
+  certificateTitle String
+  courseName       String
+  organizationName String
+  issueDate        DateTime          @db.Date
+  expirationDate   DateTime          @db.Date
+  status           CertificateStatus @default(VALID)
+  blockchainTxHash String?
+  certificateHash  String?
+  blockchainStatus BlockchainRegistrationStatus @default(UNREGISTERED)
+  blockchainJob    CertificateBlockchainJob?
+  revocationStatus RevocationStatus @default(NONE)
+  revocationTxHash String?
+  revokedAt        DateTime?
+  revocationJob    CertificateRevocationJob?
+  notifications    CertificateNotification[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  organizationId   String
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId])
+}
